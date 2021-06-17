@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 abstract class BasePage extends StatefulWidget {
-  BasePage({Key? key}) : super(key: key);
+  const BasePage({Key? key}) : super(key: key);
 }
 
 abstract class BasePageState<T extends BasePage> extends State<T> {

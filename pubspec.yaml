@@ -52,6 +52,8 @@ flutter:
     - assets/images/tutorial2.png
     - assets/images/tutorial3.png
     - assets/images/ic_arrow_right.png
+    - assets/images/ic_search.png
+    - assets/images/ic_cover_movie.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
