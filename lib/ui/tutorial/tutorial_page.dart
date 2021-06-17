@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/base/base_page.dart';
+import 'package:untitled/ui/home/home_page.dart';
+import 'package:untitled/utils/navigate_utils.dart';
 
 class TutorialPage extends BasePage {
-  static TutorialPage instance() => TutorialPage();
+  const TutorialPage({Key? key}) : super(key: key);
 
-  final String screenName = "TutorialPage";
+  static const String routerName = "/tutorial";
 
   @override
   _TutorialPageState createState() => _TutorialPageState();
@@ -12,14 +14,14 @@ class TutorialPage extends BasePage {
 
 class _TutorialPageState extends BasePageState<TutorialPage> {
   String getTitle() => _titleList[_currentPage];
-  final List<String> _titleList = [
+  static const List<String> _titleList = [
     "Get the first\nMovie &TV\ninformation",
     "Know the movie\nis not worth\nWatching",
     "Real-time\nupdates movie\nTrailer"
   ];
 
   String getTitleBtn() => _titleBtnList[_currentPage];
-  final List<String> _titleBtnList = ["Next", "Next", "Get Stared"];
+  static const List<String> _titleBtnList = ["Next", "Next", "Get Stared"];
 
   late final PageController _pageController;
   var _currentPage = 0;
@@ -29,7 +31,7 @@ class _TutorialPageState extends BasePageState<TutorialPage> {
   void init() {
     _pageController = PageController(initialPage: 0);
     _pageController.addListener(() {
-      int? page = _pageController.page?.round().toInt();
+      final int? page = _pageController.page?.round().toInt();
       if (page != null && page != _currentPage) {
         print(page);
         setState(() {
@@ -43,10 +45,16 @@ class _TutorialPageState extends BasePageState<TutorialPage> {
   @override
   Widget renderUI(BuildContext context) {
     return Scaffold(
-        body: Stack(children: [pageControllerWidget(), contentWidget()]));
+        body: Stack(children: [_buildPageController(), _buildContent()]));
   }
 
-  Widget pageControllerWidget() {
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  Widget _buildPageController() {
     return PageView(
         scrollDirection: Axis.horizontal,
         controller: _pageController,
@@ -55,165 +63,174 @@ class _TutorialPageState extends BasePageState<TutorialPage> {
             children: [
               Container(color: Colors.black),
               Align(
-                  alignment: Alignment.topCenter,
-                  child: Image.asset('assets/images/tutorial1.png',
-                      fit: BoxFit.fitWidth)),
+                alignment: Alignment.topCenter,
+                child: Image.asset('assets/images/tutorial1.png',
+                    fit: BoxFit.fitWidth),
+              ),
               Container(
-                  decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: FractionalOffset(0.0, 0.5),
-                    end: FractionalOffset(0.5, 1.0),
-                    colors: [
-                      Color.fromRGBO(245, 144, 14, 0.17),
-                      Color.fromRGBO(219, 49, 103, 1)
-                    ]),
-              ))
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: FractionalOffset(0.0, 0.5),
+                      end: FractionalOffset(0.5, 1.0),
+                      colors: [
+                        Color.fromRGBO(245, 144, 14, 0.17),
+                        Color.fromRGBO(219, 49, 103, 1)
+                      ]),
+                ),
+              )
             ],
           ),
           Stack(
             children: [
               Container(color: Colors.white),
               Align(
-                  alignment: Alignment.topCenter,
-                  child: Image.asset('assets/images/tutorial2.png',
-                      fit: BoxFit.fitWidth)),
+                alignment: Alignment.topCenter,
+                child: Image.asset('assets/images/tutorial2.png',
+                    fit: BoxFit.fitWidth),
+              ),
               Container(
-                  decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: FractionalOffset(0.5, 0.5),
-                    end: FractionalOffset(1.0, 1.0),
-                    colors: [
-                      Color.fromRGBO(245, 213, 71, 0.0),
-                      Color.fromRGBO(245, 213, 71, 1)
-                    ]),
-              ))
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: FractionalOffset(0.5, 0.5),
+                      end: FractionalOffset(1.0, 1.0),
+                      colors: [
+                        Color.fromRGBO(245, 213, 71, 0.0),
+                        Color.fromRGBO(245, 213, 71, 1)
+                      ]),
+                ),
+              )
             ],
           ),
           Stack(
             children: [
               Align(
-                  alignment: Alignment.topCenter,
-                  child: Image.asset('assets/images/tutorial3.png',
-                      fit: BoxFit.fitWidth)),
+                alignment: Alignment.topCenter,
+                child: Image.asset('assets/images/tutorial3.png',
+                    fit: BoxFit.fitWidth),
+              ),
               Container(
-                  decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: FractionalOffset(0.0, 0.0),
-                    end: FractionalOffset(0.5, 0.7),
-                    colors: [
-                      Color.fromRGBO(52, 92, 197, 0.0),
-                      Color.fromRGBO(20, 34, 70, 1)
-                    ]),
-              ))
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: FractionalOffset(0.0, 0.0),
+                      end: FractionalOffset(0.5, 0.7),
+                      colors: [
+                        Color.fromRGBO(52, 92, 197, 0.0),
+                        Color.fromRGBO(20, 34, 70, 1)
+                      ]),
+                ),
+              )
             ],
           )
         ]);
   }
 
-  Widget contentWidget() {
+  Widget _buildContent() {
     return Container(
-        alignment: Alignment.bottomCenter,
-        margin: EdgeInsets.only(bottom: screenHeight * 0.12),
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Text(
-            getTitle(),
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 34,
-              height: 1.3,
-              fontWeight: FontWeight.normal,
-              color: Colors.white,
-            ),
+      alignment: Alignment.bottomCenter,
+      margin: EdgeInsets.only(bottom: screenHeight * 0.12),
+      child: Column(mainAxisSize: MainAxisSize.min, children: [
+        Text(
+          getTitle(),
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 34,
+            height: 1.3,
+            fontWeight: FontWeight.normal,
+            color: Colors.white,
           ),
-          SizedBox(height: 16),
-          dotsWidget(),
-          SizedBox(height: 56),
-          buttonWidget()
-        ]));
+        ),
+        SizedBox(height: 16),
+        _buildDots(),
+        SizedBox(height: 56),
+        _buildButton()
+      ]),
+    );
   }
 
-  Widget dotsWidget() {
+  Widget _buildDots() {
     return Container(
-        width: 68,
-        height: 16,
-        child: ListView(
-            children: dotsView(),
-            scrollDirection: Axis.horizontal,
-            physics: const NeverScrollableScrollPhysics()));
+      width: 88,
+      height: 16,
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        for (var i = 0; i < _titleList.length; i++)
+          Opacity(
+            opacity: i == _currentPage ? 1 : 0.4,
+            child: Image.asset('assets/images/logo.png', fit: BoxFit.fitHeight),
+          )
+      ]),
+    );
   }
 
-  List<Widget> dotsView() {
-    final views = <Widget>[];
-    for (var i = 0; i < _titleList.length; i++) {
-      double opacity = i == _currentPage ? 1 : 0.4;
-      views.add(Container(
-          margin: EdgeInsets.only(right: 10),
-          child: Opacity(
-              opacity: opacity,
-              child: Image.asset('assets/images/logo.png',
-                  fit: BoxFit.fitHeight))));
-    }
-    return views;
-  }
+  Widget _buildButton() {
+    final double width = 192;
+    final double height = 54;
+    final Color borderColor = _isLastPage ? Colors.transparent : Colors.white;
+    final BorderRadius _borderRadius = BorderRadius.circular(height / 2);
 
-  Widget buttonWidget() {
-    double width = 192;
-    double height = 54;
-    double radius = height / 2;
-    Color borderColor = _isLastPage ? Colors.transparent : Colors.white;
     return ClipRRect(
-        borderRadius: BorderRadius.circular(radius),
-        child: Stack(children: [
-          Visibility(
-              visible: _isLastPage,
-              child: Positioned.fill(
-                  child: Container(
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                              begin: FractionalOffset(0.0, 0.5),
-                              end: FractionalOffset(1.0, 1.0),
-                              colors: [
+      borderRadius: _borderRadius,
+      child: Stack(children: [
+        Visibility(
+          visible: _isLastPage,
+          child: Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: FractionalOffset(0.0, 0.5),
+                  end: FractionalOffset(1.0, 1.0),
+                  colors: [
                     Color.fromRGBO(249, 159, 0, 1),
                     Color.fromRGBO(219, 48, 105, 1)
-                  ]))))),
-          SizedBox(
-              width: width,
-              height: height,
-              child: TextButton(
-                  onPressed: () {
-                    nextPage();
-                  },
-                  style: ButtonStyle(
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(radius),
-                          side: BorderSide(color: borderColor)))),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(getTitleBtn(),
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.white)),
-                      Visibility(
-                          visible: !_isLastPage, child: SizedBox(width: 12)),
-                      Visibility(
-                          visible: !_isLastPage,
-                          child: SizedBox(
-                              child: Icon(Icons.arrow_forward_sharp,
-                                  color: Colors.white)))
-                    ],
-                  )))
-        ]));
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(
+          width: width,
+          height: height,
+          child: TextButton(
+            onPressed: () {
+              _nextPage(context);
+            },
+            style: ButtonStyle(
+                shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                  borderRadius: _borderRadius,
+                  side: BorderSide(color: borderColor)),
+            )),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  getTitleBtn(),
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.normal,
+                      color: Colors.white),
+                ),
+                Visibility(visible: !_isLastPage, child: SizedBox(width: 12)),
+                Visibility(
+                  visible: !_isLastPage,
+                  child: SizedBox(
+                    child: Icon(Icons.arrow_forward_sharp, color: Colors.white),
+                  ),
+                )
+              ],
+            ),
+          ),
+        )
+      ]),
+    );
   }
 
-  void nextPage() {
+  void _nextPage(BuildContext context) {
     if (_isLastPage) {
+      NavigateUtils.pushToRootActivity(context, HomePage());
       return;
     }
     _pageController.animateToPage(_currentPage + 1,
         duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
   }
-
-  void nextToScreen() {}
 }
