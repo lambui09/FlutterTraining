@@ -1,4 +1,4 @@
-class StringLocal {
+class StringApp {
   // Tabs
   static const String movies = 'MOVIES';
   static const String tv = 'TV';

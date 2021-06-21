@@ -1,23 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/base/base_adapter.dart';
 import 'package:untitled/data/model/movie.dart';
-import 'package:untitled/utils/color_utils.dart';
-import 'package:untitled/utils/string_local.dart';
+import 'package:untitled/utils/color_app.dart';
+import 'package:untitled/utils/string_app.dart';
+import 'movie_item_view.dart';
 
-import 'movie_item_widget.dart';
-
-abstract class PopularListItem {
-  Widget buildNowList(BuildContext context);
-}
-
-class PopularMovieAdapter extends BaseAdapter<Movie>
-    implements PopularListItem {
+class PopularMovieAdapter extends BaseAdapter<Movie> {
   static const double _padding = 20;
   static const double _imgHorizontalRatio = 210 / 140;
   static const double _titleHeight = 30;
 
   @override
-  Widget buildNowList(BuildContext context) {
+  Widget renderUI(BuildContext context) {
     if (dataList.isEmpty) {
       return Container(height: 0);
     }
@@ -31,7 +25,7 @@ class PopularMovieAdapter extends BaseAdapter<Movie>
       child: Column(
         children: [
           _buildTitleHeader(),
-          _buildListView(itemW, itemH),
+          _buildListView(),
         ],
       ),
     );
@@ -39,19 +33,19 @@ class PopularMovieAdapter extends BaseAdapter<Movie>
 
   Widget _buildTitleHeader() {
     return Padding(
-      padding: EdgeInsets.only(left: _padding),
-      child: SizedBox(
+      padding: const EdgeInsets.only(left: _padding),
+      child: const SizedBox(
         width: double.infinity,
         height: _titleHeight,
         child: Padding(
-          padding: EdgeInsets.only(top: _padding / 2),
+          padding: const EdgeInsets.only(top: _padding / 2),
           child: Text(
-            StringLocal.popular,
+            StringApp.popular,
             textAlign: TextAlign.start,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.normal,
-              color: ColorUtils.textColor102,
+              color: ColorUtils.color_text_102,
             ),
           ),
         ),
@@ -59,7 +53,7 @@ class PopularMovieAdapter extends BaseAdapter<Movie>
     );
   }
 
-  Widget _buildListView(double itemW, double itemH) {
+  Widget _buildListView() {
     return Expanded(
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -68,11 +62,14 @@ class PopularMovieAdapter extends BaseAdapter<Movie>
           mainAxisSpacing: _padding,
           childAspectRatio: _imgHorizontalRatio,
         ),
-        itemCount: dataList.length,
+        itemCount: getSize(),
         scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.all(_padding),
+        padding: const EdgeInsets.all(_padding),
         itemBuilder: (BuildContext context, int index) {
-          return MovieItemWidget.buildHorizontalNoName(getItem(index)!);
+          return MovieItemCell(MovieItemType.horizontalNoName, getItem(index)!,
+              (data) {
+            print(data.posterUrl);
+          });
         },
       ),
     );
