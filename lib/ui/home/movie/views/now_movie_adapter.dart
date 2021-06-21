@@ -1,24 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/base/base_adapter.dart';
 import 'package:untitled/data/model/movie.dart';
-import 'package:untitled/utils/color_utils.dart';
-import 'package:untitled/utils/string_local.dart';
+import 'package:untitled/utils/color_app.dart';
+import 'package:untitled/utils/string_app.dart';
 
-import 'movie_item_widget.dart';
+import 'movie_item_view.dart';
 
-abstract class NowListItem {
-  Widget buildNowList(BuildContext context);
-}
-
-class NowMovieAdapter extends BaseAdapter<Movie> implements NowListItem {
+class NowMovieAdapter extends BaseAdapter<Movie> {
   static const double _nameHeight = 48;
   static const double _padding = 10;
   static const double _imgHorizontalRatio = 140 / 210;
   static const double _titleHeight = 40;
-  static const EdgeInsets margin = EdgeInsets.symmetric(horizontal: _padding);
 
   @override
-  Widget buildNowList(BuildContext context) {
+  Widget renderUI(BuildContext context) {
     if (dataList.isEmpty) {
       return Container(height: 0);
     }
@@ -32,7 +27,7 @@ class NowMovieAdapter extends BaseAdapter<Movie> implements NowListItem {
       child: Column(
         children: [
           _buildTitleHeader(),
-          _buildListView(itemW, itemH),
+          _buildListView(),
         ],
       ),
     );
@@ -40,30 +35,32 @@ class NowMovieAdapter extends BaseAdapter<Movie> implements NowListItem {
 
   Widget _buildTitleHeader() {
     return Padding(
-      padding: EdgeInsets.only(left: _padding * 2),
-      child: SizedBox(
+      padding: const EdgeInsets.only(left: _padding * 2),
+      child: const SizedBox(
         width: double.infinity,
         height: _titleHeight,
         child: Text(
-          StringLocal.now,
-          style: TextStyle(
+          StringApp.now,
+          style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.normal,
-              color: ColorUtils.textColor102),
+              color: ColorUtils.color_text_102),
         ),
       ),
     );
   }
 
-  Widget _buildListView(double itemW, double itemH) {
+  Widget _buildListView() {
     return Expanded(
       child: ListView.builder(
-        itemCount: dataList.length,
+        itemCount: getSize(),
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.only(left: _padding, right: _padding),
         itemBuilder: (BuildContext context, int index) {
-          return MovieItemWidget.buildHorizontal(
-              getItem(index)!, itemW, itemH, margin);
+          return MovieItemCell(MovieItemType.horizontal, getItem(index)!,
+              (data) {
+            print(data.posterUrl);
+          });
         },
       ),
     );

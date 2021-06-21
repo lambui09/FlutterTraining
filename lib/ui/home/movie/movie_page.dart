@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:untitled/base/base_page.dart';
 import 'package:untitled/data/model/movie.dart';
+import 'package:untitled/data/source/remote/repository/movie_repository.dart';
+import 'package:untitled/ui/home/movie/movie_bloc.dart';
 import 'package:untitled/ui/home/movie/views/now_movie_adapter.dart';
 import 'package:untitled/ui/home/movie/views/popular_movie_adapter.dart';
-import 'package:untitled/ui/home/movie/views/slider_movie_adapter.dart';
-import 'package:untitled/utils/color_utils.dart';
-import 'package:untitled/utils/resource_utils.dart';
-import 'package:untitled/utils/string_local.dart';
+import 'package:untitled/ui/home/movie/views/slider_movie_view.dart';
 
 class MoviePage extends BasePage {
   const MoviePage({Key? key}) : super(key: key);
 
-  static const String routerName = "/movie";
+  static const String routeName = "/movie";
 
   @override
   _MoviePageState createState() => _MoviePageState();
@@ -19,77 +19,52 @@ class MoviePage extends BasePage {
 
 class _MoviePageState extends BasePageState<MoviePage> {
   final List<Movie> _nowItems = [
-    Movie('The Flash (2014)',
-        'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/lJA2RCMfsWoskqlQhXPSLFQGXEJ.jpg'),
-    Movie('Loki (2021)',
+    Movie(
+      '6',
+      'The Flash (2014)',
+      'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/lJA2RCMfsWoskqlQhXPSLFQGXEJ.jpg',
+    ),
+    Movie('6', 'Loki (2021)',
         'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/kEl2t3OhXc3Zb9FBh1AuYzRTgZp.jpg'),
-    Movie('Superman & Lois (2021)',
+    Movie('6', 'Superman & Lois (2021)',
         'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/vlv1gn98GqMnKHLSh0dNciqGfBl.jpg'),
-    Movie('The Flash (2014)',
+    Movie('6', 'The Flash (2014)',
         'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/lJA2RCMfsWoskqlQhXPSLFQGXEJ.jpg'),
-    Movie('Loki (2021)',
+    Movie('6', 'Loki (2021)',
         'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/kEl2t3OhXc3Zb9FBh1AuYzRTgZp.jpg'),
-    Movie('Superman & Lois (2021)',
-        'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/vlv1gn98GqMnKHLSh0dNciqGfBl.jpg')
+    Movie(
+      '6',
+      'Superman & Lois (2021)',
+      'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/vlv1gn98GqMnKHLSh0dNciqGfBl.jpg',
+    )
   ];
 
+  late MovieBloc _movieBloc;
+
   final NowMovieAdapter _nowMovieAdapter = NowMovieAdapter();
-  final SliderMovieAdapter _sliderMovieAdapter = SliderMovieAdapter();
   final PopularMovieAdapter _popularMovieAdapter = PopularMovieAdapter();
 
   @override
   void init() {
-    _nowMovieAdapter.setData(_nowItems);
-    _popularMovieAdapter.addData(_nowItems);
-    _popularMovieAdapter.addData(_nowItems);
-  }
-
-  @override
-  void dispose() {
-    _sliderMovieAdapter.release();
-    super.dispose();
+    _movieBloc = MovieBloc(RepositoryProvider.of<MovieRepository>(context));
   }
 
   @override
   Widget renderUI(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [_buildHeader(), Expanded(child: _buildContent())],
-      ),
+      body: _buildContent(),
     );
   }
 
-  Widget _buildHeader() {
-    final double height = 56;
-    return SizedBox(
-      height: height,
-      width: double.infinity,
-      child: Row(children: [
-        SizedBox(width: 20),
-        Expanded(
-          child: Text(
-            StringLocal.movies,
-            style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.normal,
-                color: ColorUtils.textColor33),
-          ),
-        ),
-        SizedBox(
-          height: height,
-          width: height,
-          child: InkWell(
-            customBorder: CircleBorder(),
-            onTap: () {},
-            child: Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Image.asset(ResourceUtils.ic_search, fit: BoxFit.cover),
-            ),
-          ),
-        ),
-        SizedBox(width: 8)
-      ]),
-    );
+  Widget _build(BuildContext context) {
+    return StreamBuilder<List<Movie>>(
+        stream: _movieBloc.nowMovieList,
+        builder: (context, snapshot) {
+          final data = snapshot.data ?? [];
+          _nowMovieAdapter.setData(data);
+          _popularMovieAdapter.setData(data);
+          return _buildContent();
+        });
   }
 
   Widget _buildContent() {
@@ -97,12 +72,31 @@ class _MoviePageState extends BasePageState<MoviePage> {
         itemCount: 3,
         itemBuilder: (BuildContext context, int index) {
           if (index == 0) {
-            return _sliderMovieAdapter.buildSlider(screenHeight * 0.22);
+            return StreamBuilder<List<Movie>>(
+                stream: _movieBloc.sliderMovieList,
+                builder: (context, snapshot) {
+                  final data = snapshot.data ?? [];
+                  return SliderMovieView(data);
+                });
           }
+
           if (index == 1) {
-            return _nowMovieAdapter.buildNowList(context);
+            return StreamBuilder<List<Movie>>(
+                stream: _movieBloc.nowMovieList,
+                builder: (context, snapshot) {
+                  final data = snapshot.data ?? [];
+                  _nowMovieAdapter.setData(data);
+                  return _nowMovieAdapter.renderUI(context);
+                });
           }
-          return _popularMovieAdapter.buildNowList(context);
+
+          return StreamBuilder<List<Movie>>(
+              stream: _movieBloc.popularMovieList,
+              builder: (context, snapshot) {
+                final data = snapshot.data ?? [];
+                _popularMovieAdapter.setData(data);
+                return _popularMovieAdapter.renderUI(context);
+              });
         });
   }
 }

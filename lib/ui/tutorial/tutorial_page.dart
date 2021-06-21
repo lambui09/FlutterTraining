@@ -6,7 +6,7 @@ import 'package:untitled/utils/navigate_utils.dart';
 class TutorialPage extends BasePage {
   const TutorialPage({Key? key}) : super(key: key);
 
-  static const String routerName = "/tutorial";
+  static const String routeName = "/tutorial";
 
   @override
   _TutorialPageState createState() => _TutorialPageState();

@@ -6,7 +6,7 @@ import 'package:untitled/utils/navigate_utils.dart';
 class SplashPage extends BasePage {
   const SplashPage({Key? key}) : super(key: key);
 
-  static const String routerName = "/splash";
+  static const String routeName = "/splash";
 
   @override
   _SplashPageState createState() => _SplashPageState();

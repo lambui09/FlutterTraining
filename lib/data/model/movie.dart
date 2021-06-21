@@ -1,6 +1,11 @@
 class Movie {
-  final String name;
-  final String imgUrl;
+  final String id;
+  final String title;
+  final String posterUrl;
 
-  Movie(this.name, this.imgUrl);
+  Movie(
+    this.id,
+    this.title,
+    this.posterUrl,
+  );
 }
