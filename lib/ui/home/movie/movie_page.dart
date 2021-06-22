@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tuple/tuple.dart';
 import 'package:untitled/base/base_page.dart';
 import 'package:untitled/data/model/movie.dart';
 import 'package:untitled/data/source/remote/repository/movie_repository.dart';
@@ -18,27 +19,6 @@ class MoviePage extends BasePage {
 }
 
 class _MoviePageState extends BasePageState<MoviePage> {
-  final List<Movie> _nowItems = [
-    Movie(
-      '6',
-      'The Flash (2014)',
-      'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/lJA2RCMfsWoskqlQhXPSLFQGXEJ.jpg',
-    ),
-    Movie('6', 'Loki (2021)',
-        'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/kEl2t3OhXc3Zb9FBh1AuYzRTgZp.jpg'),
-    Movie('6', 'Superman & Lois (2021)',
-        'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/vlv1gn98GqMnKHLSh0dNciqGfBl.jpg'),
-    Movie('6', 'The Flash (2014)',
-        'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/lJA2RCMfsWoskqlQhXPSLFQGXEJ.jpg'),
-    Movie('6', 'Loki (2021)',
-        'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/kEl2t3OhXc3Zb9FBh1AuYzRTgZp.jpg'),
-    Movie(
-      '6',
-      'Superman & Lois (2021)',
-      'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/vlv1gn98GqMnKHLSh0dNciqGfBl.jpg',
-    )
-  ];
-
   late MovieBloc _movieBloc;
 
   final NowMovieAdapter _nowMovieAdapter = NowMovieAdapter();
@@ -52,51 +32,27 @@ class _MoviePageState extends BasePageState<MoviePage> {
   @override
   Widget renderUI(BuildContext context) {
     return Scaffold(
-      body: _buildContent(),
-    );
-  }
-
-  Widget _build(BuildContext context) {
-    return StreamBuilder<List<Movie>>(
-        stream: _movieBloc.nowMovieList,
+      body: StreamBuilder<Tuple3<List<Movie>, List<Movie>, List<Movie>>>(
+        stream: _movieBloc.dataList,
         builder: (context, snapshot) {
-          final data = snapshot.data ?? [];
-          _nowMovieAdapter.setData(data);
-          _popularMovieAdapter.setData(data);
-          return _buildContent();
-        });
-  }
+          final data = snapshot.data;
 
-  Widget _buildContent() {
-    return ListView.builder(
-        itemCount: 3,
-        itemBuilder: (BuildContext context, int index) {
-          if (index == 0) {
-            return StreamBuilder<List<Movie>>(
-                stream: _movieBloc.sliderMovieList,
-                builder: (context, snapshot) {
-                  final data = snapshot.data ?? [];
-                  return SliderMovieView(data);
-                });
-          }
+          _nowMovieAdapter.setData(data?.item2 ?? []);
+          _popularMovieAdapter.setData(data?.item3 ?? []);
 
-          if (index == 1) {
-            return StreamBuilder<List<Movie>>(
-                stream: _movieBloc.nowMovieList,
-                builder: (context, snapshot) {
-                  final data = snapshot.data ?? [];
-                  _nowMovieAdapter.setData(data);
+          return ListView.builder(
+              itemCount: 3,
+              itemBuilder: (BuildContext context, int index) {
+                if (index == 0) {
+                  return SliderMovieView(data?.item1 ?? []);
+                }
+                if (index == 1) {
                   return _nowMovieAdapter.renderUI(context);
-                });
-          }
-
-          return StreamBuilder<List<Movie>>(
-              stream: _movieBloc.popularMovieList,
-              builder: (context, snapshot) {
-                final data = snapshot.data ?? [];
-                _popularMovieAdapter.setData(data);
+                }
                 return _popularMovieAdapter.renderUI(context);
               });
-        });
+        },
+      ),
+    );
   }
 }

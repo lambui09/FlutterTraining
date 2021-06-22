@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:untitled/base/base_adapter.dart';
 import 'package:untitled/data/model/movie.dart';
 import 'package:untitled/utils/color_app.dart';
+import 'package:untitled/utils/extension/image_etx.dart';
 
 enum MovieItemType { horizontal, horizontalNoName }
 
@@ -45,7 +46,7 @@ class MovieItemCell extends BaseItemCell<Movie> {
             borderRadius: BorderRadius.circular(24),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(6),
-              child: Image.network(movie.posterUrl, fit: BoxFit.cover),
+              child: buildImage(movie.posterUrl),
             ),
           ),
         ),
@@ -77,7 +78,7 @@ class MovieItemCell extends BaseItemCell<Movie> {
         borderRadius: BorderRadius.circular(6),
         child: Stack(
           children: [
-            Image.network(movie.posterUrl, fit: BoxFit.cover),
+            buildImage(movie.posterUrl),
             Align(
               alignment: Alignment.topRight,
               child: Container(

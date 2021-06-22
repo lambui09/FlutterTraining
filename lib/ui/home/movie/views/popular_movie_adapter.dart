@@ -13,14 +13,14 @@ class PopularMovieAdapter extends BaseAdapter<Movie> {
   @override
   Widget renderUI(BuildContext context) {
     if (dataList.isEmpty) {
-      return Container(height: 0);
+      return const SizedBox();
     }
 
     final double screenWidth = MediaQuery.of(context).size.width;
     final double itemW = screenWidth * 140 / 375;
     final double itemH = itemW * _imgHorizontalRatio;
 
-    return Container(
+    return SizedBox(
       height: itemH * 2 + _padding * 3 + _titleHeight,
       child: Column(
         children: [

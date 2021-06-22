@@ -7,32 +7,19 @@ abstract class MovieRepository {
   Future<List<Movie>> getMovieList(int movieId, int page);
 }
 
-class MovieRepositoryImpl extends BaseRepository implements MovieRepository {
+class MovieRepositoryImpl implements MovieRepository {
   final ApiService _apiService;
 
   MovieRepositoryImpl(this._apiService);
 
   @override
   Future<List<Movie>> getMovieList(int movieId, int page) async {
-    try {
-      print("getMovieList");
-      Uri uri = createUri('/4/list/$movieId',
-          {'page': '$page', 'api_key': 'c29a024e152bfd1ad3d4d0dc8cb48019'});
+    Uri uri = createUri(KeyPrams.v4_list + '$movieId', {
+      KeyPrams.page: '$page',
+    });
 
-      //   Uri uri = Uri.parse("https://api.themoviedb.org/3/list/1?api_key=c29a024e152bfd1ad3d4d0dc8cb48019");
-      print('$uri');
-
-      final results = await _apiService.getItem(uri);
-      final data = results['results'] as List;
-      print("data: $data");
-
-      return data
-          .map((item) => MovieResponse.fromJson(item).toMovie())
-          .toList();
-    } catch (e) {
-      print("errror");
-      print(e.toString());
-      rethrow;
-    }
+    final results = await _apiService.getItem(uri);
+    final data = results[KeyPrams.results] as List;
+    return data.map((item) => MovieResponse.fromJson(item).toMovie()).toList();
   }
 }

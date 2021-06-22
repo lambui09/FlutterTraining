@@ -15,14 +15,14 @@ class NowMovieAdapter extends BaseAdapter<Movie> {
   @override
   Widget renderUI(BuildContext context) {
     if (dataList.isEmpty) {
-      return Container(height: 0);
+      return const SizedBox();
     }
 
     final double screenWidth = MediaQuery.of(context).size.width;
     final double itemW = screenWidth * 140 / 375;
     final double itemH = itemW / _imgHorizontalRatio + _nameHeight;
 
-    return Container(
+    return SizedBox(
       height: itemH + _titleHeight,
       child: Column(
         children: [

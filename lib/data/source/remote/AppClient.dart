@@ -2,76 +2,69 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart';
+import 'package:untitled/data/source/remote/response/error_response.dart';
 
 abstract class AppClient extends BaseClient {
-  Future<dynamic> getItem(Uri uri, [Map<String, String>? headers]) {
-    print("getItem");
-    return this.get(
-      uri,
-      headers: {
-        ...?headers,
-        HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8',
-      },
-    ).then(_processData);
-  }
+  Future<dynamic> getItem(Uri uri) => this
+      .get(
+        uri,
+      )
+      .then(_processData);
 
   Future<dynamic> postItem(
     Uri url, {
-    Map<String, String>? headers,
     Map<String, dynamic>? body,
-  }) {
-    return this
-        .post(
-          url,
-          headers: {
-            ...?headers,
-            HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8',
-          },
-          body: jsonEncode(body),
-        )
-        .then(_processData);
-  }
+  }) =>
+      this
+          .post(
+            url,
+            body: jsonEncode(body),
+          )
+          .then(_processData);
 
   Future<dynamic> putItem(
     Uri url, {
-    Map<String, String>? headers,
     Map<String, dynamic>? body,
   }) =>
       this
           .put(
             url,
-            headers: {
-              ...?headers,
-              HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8',
-            },
             body: body != null ? jsonEncode(body) : null,
           )
           .then(_processData);
 
-  Future<dynamic> deleteItem(dynamic url, {Map<String, String>? headers}) =>
-      this.delete(
+  Future<dynamic> deleteItem(dynamic url) => this
+      .delete(
         url,
-        headers: {
-          ...?headers,
-          HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8',
-        },
-      ).then(_processData);
+      )
+      .then(_processData);
 
   static dynamic _processData(Response response) {
     final statusCode = response.statusCode;
-    final json = jsonDecode(response.body);
+    final body = jsonDecode(response.body);
 
-    if (HttpStatus.ok <= statusCode &&
-        statusCode <= HttpStatus.multipleChoices) {
-      return json;
+    print('Body Json: $body');
+
+    if (HttpStatus.ok <= statusCode && statusCode <= 300) {
+      return body;
     }
 
-    final request = response.request;
+    AppError appError;
 
-    // TODO handle error Response
-    print('requestError: $request errorResponse=$response');
-    // TODO Throw error
-    throw Future.error(response.statusCode);
+    if (statusCode == HttpStatus.unauthorized) {
+      appError = AppError.toUnauthorized();
+    } else {
+      try {
+        appError = ErrorResponse.fromJson(body).toAppError();
+      } catch (e) {
+        appError = AppError.toUnknown();
+      }
+    }
+
+    print('-----------------------------------------------------------');
+    print('ErrorResponse: ' + appError.message);
+
+    throw appError;
   }
 }
 
@@ -81,7 +74,6 @@ class ApiService extends AppClient {
 
   @override
   Future<StreamedResponse> send(BaseRequest request) {
-    print("send");
     // TODO await _getToken
     final token = null;
 
@@ -92,16 +84,17 @@ class ApiService extends AppClient {
     request.headers[HttpHeaders.contentTypeHeader] =
         'application/json; charset=utf-8';
 
-    print('Request--------- $request');
+    print('-----------------------------------------------------------');
+    print('Request: $request');
     return _client.send(request).timeout(_timeout).then(_processResponse);
   }
 
   Future<StreamedResponse> _processResponse(StreamedResponse response) async {
-    print('Response--------- ${response.statusCode} ${response.request}');
+    print('-----------------------------------------------------------');
+    print('Request Success: Code ${response.statusCode}, ${response.request}');
 
-    if (response.statusCode == HttpStatus.unauthorized ||
-        response.statusCode == HttpStatus.forbidden) {
-      // TODO await _logOut
+    if (response.statusCode == HttpStatus.unauthorized) {
+      // TODO Refresh Token
       print('Unauthorized');
     }
 
