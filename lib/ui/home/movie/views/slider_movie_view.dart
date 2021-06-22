@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/base/base_view.dart';
 import 'package:untitled/data/model/movie.dart';
+import 'package:untitled/utils/extension/image_etx.dart';
 
 class SliderMovieView extends BaseViewStateFul {
   SliderMovieView(this.dataList);
@@ -28,12 +29,16 @@ class _SliderMovieViewState extends BaseViewState<SliderMovieView> {
 
   @override
   Widget renderUI(BuildContext context) {
-    return Container(
+    if (widget.dataList.isEmpty) {
+      return const SizedBox();
+    }
+    return SizedBox(
       width: double.infinity,
       height: screenHeight * 0.25,
       child: Column(
         children: [
           SizedBox(
+            width: double.infinity,
             height: screenHeight * 0.22,
             child: PageView.builder(
               onPageChanged: _onPageChanged,
@@ -78,8 +83,7 @@ class _SliderMovieViewState extends BaseViewState<SliderMovieView> {
         borderRadius: BorderRadius.circular(24),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(8),
-          child: Image.network(widget.dataList[index].posterUrl,
-              fit: BoxFit.cover),
+          child: buildImage(widget.dataList[index].backdropUrl),
         ),
       ),
     );
