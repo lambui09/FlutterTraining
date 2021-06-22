@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/base/base_page.dart';
 import 'package:untitled/ui/home/home_page.dart';
+import 'package:untitled/utils/extension/size_ext.dart';
 import 'package:untitled/utils/navigate_utils.dart';
 
 class TutorialPage extends BasePage {
@@ -43,9 +44,17 @@ class _TutorialPageState extends BasePageState<TutorialPage> {
   }
 
   @override
-  Widget renderUI(BuildContext context) {
+  Widget buildUI(BuildContext context) {
     return Scaffold(
-        body: Stack(children: [_buildPageController(), _buildContent()]));
+      body: SafeArea(
+        top: false,
+        bottom: false,
+        child: Stack(children: [
+          _buildPageController(),
+          _buildContent(),
+        ]),
+      ),
+    );
   }
 
   @override
@@ -65,7 +74,7 @@ class _TutorialPageState extends BasePageState<TutorialPage> {
               Align(
                 alignment: Alignment.topCenter,
                 child: Image.asset('assets/images/tutorial1.png',
-                    fit: BoxFit.fitWidth),
+                    fit: BoxFit.cover),
               ),
               Container(
                 decoration: BoxDecoration(
@@ -86,7 +95,7 @@ class _TutorialPageState extends BasePageState<TutorialPage> {
               Align(
                 alignment: Alignment.topCenter,
                 child: Image.asset('assets/images/tutorial2.png',
-                    fit: BoxFit.fitWidth),
+                    fit: BoxFit.cover),
               ),
               Container(
                 decoration: BoxDecoration(
@@ -106,7 +115,7 @@ class _TutorialPageState extends BasePageState<TutorialPage> {
               Align(
                 alignment: Alignment.topCenter,
                 child: Image.asset('assets/images/tutorial3.png',
-                    fit: BoxFit.fitWidth),
+                    fit: BoxFit.cover),
               ),
               Container(
                 decoration: BoxDecoration(
@@ -127,7 +136,7 @@ class _TutorialPageState extends BasePageState<TutorialPage> {
   Widget _buildContent() {
     return Container(
       alignment: Alignment.bottomCenter,
-      margin: EdgeInsets.only(bottom: screenHeight * 0.12),
+      margin: EdgeInsets.only(bottom: getScreenHeight(context) * 0.12),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         Text(
           getTitle(),

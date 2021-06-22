@@ -21,7 +21,7 @@ class ErrorResponse {
         message: jsonDecode(json, "status_message"),
       );
 
-  AppError toAppError() {
+  AppError toSeverError() {
     return AppError(message: this.message, type: AppErrorType.server);
   }
 }

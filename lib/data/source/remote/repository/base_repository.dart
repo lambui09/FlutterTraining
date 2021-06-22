@@ -26,6 +26,7 @@ dynamic jsonDecode(Map<String, dynamic> json, String key) {
     dynamic data = json[key];
     if (data == null) {
       print('Parse Json Error with key: $key');
+      return null;
     }
     return data;
   } on Exception catch (e) {

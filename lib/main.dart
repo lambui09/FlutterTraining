@@ -5,17 +5,17 @@ import 'package:untitled/ui/splash/splash_page.dart';
 
 import 'data/source/remote/repository/movie_repository.dart';
 
-final apiService = ApiService();
-final movieRepository = MovieRepositoryImpl(apiService);
+final providerApiService = ApiService();
+final providerMovieRepository = MovieRepositoryImpl(providerApiService);
 
 void main() {
   runApp(MultiRepositoryProvider(
     providers: [
       RepositoryProvider<ApiService>(
-        create: (context) => apiService,
+        create: (context) => providerApiService,
       ),
       RepositoryProvider<MovieRepository>(
-        create: (context) => movieRepository,
+        create: (context) => providerMovieRepository,
       ),
     ],
     child: MyApp(),

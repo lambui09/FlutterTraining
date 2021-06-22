@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/base/base_adapter.dart';
 import 'package:untitled/data/model/movie.dart';
-import 'package:untitled/utils/color_app.dart';
-import 'package:untitled/utils/string_app.dart';
+import 'package:untitled/utils/extension/size_ext.dart';
+import 'package:untitled/utils/resource/color_app.dart';
+import 'package:untitled/utils/resource/string_app.dart';
 
 import 'movie_item_view.dart';
 
@@ -12,13 +13,11 @@ class NowMovieAdapter extends BaseAdapter<Movie> {
   static const double _imgHorizontalRatio = 140 / 210;
   static const double _titleHeight = 40;
 
-  @override
-  Widget renderUI(BuildContext context) {
-    if (dataList.isEmpty) {
-      return const SizedBox();
-    }
+  const NowMovieAdapter(List<Movie> items) : super(items);
 
-    final double screenWidth = MediaQuery.of(context).size.width;
+  @override
+  Widget buildListItem(BuildContext context) {
+    final double screenWidth = getScreenWidth(context);
     final double itemW = screenWidth * 140 / 375;
     final double itemH = itemW / _imgHorizontalRatio + _nameHeight;
 
@@ -27,7 +26,7 @@ class NowMovieAdapter extends BaseAdapter<Movie> {
       child: Column(
         children: [
           _buildTitleHeader(),
-          _buildListView(),
+          _buildListItem(),
         ],
       ),
     );
@@ -44,20 +43,20 @@ class NowMovieAdapter extends BaseAdapter<Movie> {
           style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.normal,
-              color: ColorUtils.color_text_102),
+              color: ColorApp.color_text_102),
         ),
       ),
     );
   }
 
-  Widget _buildListView() {
+  Widget _buildListItem() {
     return Expanded(
       child: ListView.builder(
         itemCount: getSize(),
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.only(left: _padding, right: _padding),
         itemBuilder: (BuildContext context, int index) {
-          return MovieItemCell(MovieItemType.horizontal, getItem(index)!,
+          return MovieItemCell(MovieItemType.horizontal, getItem(index),
               (data) {
             print(data.posterUrl);
           });

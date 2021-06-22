@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/base/base_page.dart';
 import 'package:untitled/ui/tutorial/tutorial_page.dart';
+import 'package:untitled/utils/extension/size_ext.dart';
 import 'package:untitled/utils/navigate_utils.dart';
 
 class SplashPage extends BasePage {
@@ -17,7 +18,7 @@ class _SplashPageState extends BasePageState<SplashPage> {
   void init() {}
 
   @override
-  Widget renderUI(BuildContext context) {
+  Widget buildUI(BuildContext context) {
     return Scaffold(
       body: Stack(
         alignment: Alignment.center,
@@ -40,11 +41,11 @@ class _SplashPageState extends BasePageState<SplashPage> {
           ),
           Container(
             alignment: Alignment.topCenter,
-            margin: EdgeInsets.only(top: screenHeight / 3.5),
+            margin: EdgeInsets.only(top: getScreenHeight(context) / 3.5),
             child: Column(
               children: [
                 Image.asset('assets/images/logo.png',
-                    fit: BoxFit.fill, width: screenWidth / 3.5),
+                    fit: BoxFit.fill, width: getScreenWidth(context) / 3.5),
                 Padding(padding: const EdgeInsets.only(top: 4)),
                 TextButton(
                   style: TextButton.styleFrom(primary: Colors.black),

@@ -2,43 +2,38 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled/base/base_view.dart';
 
-abstract class BaseAdapter<T> {
-  final List<T> dataList = [];
+abstract class BaseAdapter<T> extends BaseViewStateLess {
+  const BaseAdapter(this.items);
 
-  int getSize() => dataList.length;
+  final List<T> items;
 
-  void setData(List<T> list) {
-    dataList.clear();
-    dataList.addAll(list);
+  int getSize() => items.length;
+
+  T getItem(int index) {
+    return items[index];
   }
 
-  void addData(List<T> list) {
-    dataList.addAll(list);
-  }
+  Widget buildListItem(BuildContext context);
 
-  T? getItem(int index) {
-    if (index < 0 || index >= dataList.length) {
-      return null;
-    }
-    return dataList[index];
+  @override
+  Widget build(BuildContext context) {
+    return getSize() == 0 ? const SizedBox() : buildListItem(context);
   }
-
-  Widget renderUI(BuildContext context);
 }
 
 abstract class BaseItemCell<T> extends BaseViewStateLess {
   final T data;
   final Function(T)? onTap;
 
-  BaseItemCell(this.data, [this.onTap]);
+  const BaseItemCell(this.data, [this.onTap]);
 
-  Widget renderUI(BuildContext context, T data);
+  Widget buildItem(BuildContext context, T data);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap != null ? () => onTap!(data) : () {},
-      child: renderUI(context, data),
+      child: buildItem(context, data),
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:untitled/data/model/movie.dart';
 import 'package:untitled/data/source/remote/AppClient.dart';
 import 'package:untitled/data/source/remote/repository/base_repository.dart';
-import 'package:untitled/data/source/remote/response/movie_reponse.dart';
+import 'package:untitled/data/source/remote/response/movie_response.dart';
 
 abstract class MovieRepository {
   Future<List<Movie>> getMovieList(int movieId, int page);

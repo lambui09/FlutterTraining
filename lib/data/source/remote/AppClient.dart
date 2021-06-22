@@ -55,7 +55,7 @@ abstract class AppClient extends BaseClient {
       appError = AppError.toUnauthorized();
     } else {
       try {
-        appError = ErrorResponse.fromJson(body).toAppError();
+        appError = ErrorResponse.fromJson(body).toSeverError();
       } catch (e) {
         appError = AppError.toUnknown();
       }

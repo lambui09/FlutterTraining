@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/base/base_page.dart';
 import 'package:untitled/ui/home/tv/tv_page.dart';
-import 'package:untitled/utils/color_app.dart';
-import 'package:untitled/utils/resource_app.dart';
-import 'package:untitled/utils/string_app.dart';
+import 'package:untitled/utils/resource/color_app.dart';
+import 'package:untitled/utils/resource/image_app.dart';
+import 'package:untitled/utils/resource/string_app.dart';
+
 import 'movie/movie_page.dart';
 
 class HomePage extends BasePage {
@@ -28,18 +29,35 @@ class _HomePageState extends BasePageState<HomePage> {
   void init() {}
 
   @override
-  Widget renderUI(BuildContext context) {
+  Widget buildUI(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         top: true,
         bottom: true,
-        child: Column(children: [
-          _buildHeader(),
-          Expanded(child: _widgetOptions[_selectedIndex]),
-        ],),
+        child: Column(
+          children: [
+            _buildHeader(),
+            Expanded(
+              child: IndexedStack(
+                index: _selectedIndex,
+                children: _widgetOptions,
+              ),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: _buildBottomNav(),
     );
+  }
+
+  String _getTitleHeader() {
+    if (_selectedIndex == 0) {
+      return StringApp.movies;
+    }
+    if (_selectedIndex == 1) {
+      return StringApp.tv;
+    }
+    return StringApp.profile;
   }
 
   Widget _buildHeader() {
@@ -51,11 +69,11 @@ class _HomePageState extends BasePageState<HomePage> {
         SizedBox(width: 20),
         Expanded(
           child: Text(
-            StringApp.movies,
+            _getTitleHeader(),
             style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.normal,
-                color: ColorUtils.color_text_33),
+                color: ColorApp.color_text_33),
           ),
         ),
         SizedBox(
@@ -66,7 +84,7 @@ class _HomePageState extends BasePageState<HomePage> {
             onTap: () {},
             child: Padding(
               padding: EdgeInsets.all(16.0),
-              child: Image.asset(ResourceUtils.ic_search, fit: BoxFit.cover),
+              child: Image.asset(ImageApp.ic_search, fit: BoxFit.cover),
             ),
           ),
         ),
@@ -90,13 +108,17 @@ class _HomePageState extends BasePageState<HomePage> {
             icon: Icon(Icons.pages_rounded), label: StringApp.profile),
       ],
       currentIndex: _selectedIndex,
-      selectedItemColor: ColorUtils.color_tabBar_selected_text,
-      unselectedItemColor: ColorUtils.color_tabBar_un_selected_text,
+      selectedItemColor: ColorApp.color_tabBar_selected_text,
+      unselectedItemColor: ColorApp.color_tabBar_un_selected_text,
       onTap: _onItemTapped,
     );
   }
 
   void _onItemTapped(int index) {
+    if (_selectedIndex == index) {
+      return;
+    }
+
     setState(() {
       _selectedIndex = index;
     });
