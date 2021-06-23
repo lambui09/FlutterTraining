@@ -19,10 +19,19 @@ class SearchPage extends BasePage {
 
 class _SearchPageState extends BasePageState<SearchPage> {
   late SearchBloc _searchBloc;
+  late ScrollController _scrollController;
 
   @override
   void init() {
     _searchBloc = SearchBloc(RepositoryProvider.of<MovieRepository>(context));
+
+    _scrollController = ScrollController();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels + 100 >=
+          _scrollController.position.maxScrollExtent) {
+        print("load more");
+      }
+    });
   }
 
   @override
@@ -82,8 +91,11 @@ class _SearchPageState extends BasePageState<SearchPage> {
       return LoadingWidget();
     } else if (state is SearchError) {
       return SearchErrorWidget();
-    } else if (state is SearchPopulated) {
-      return SearchResultWidget(items: state.items);
+    } else if (state is SearchResult) {
+      return SearchResultWidget(
+        items: state.items,
+        scrollController: _scrollController,
+      );
     }
 
     throw Exception('${state.runtimeType} is not supported');
@@ -131,7 +143,7 @@ class SearchIntro extends StatelessWidget {
           Container(
             padding: EdgeInsets.only(top: 16.0),
             child: Text(
-              'Enter a search term to begin',
+              'Enter a search keyword',
               style: TextStyle(
                 fontSize: 24,
                 color: Colors.green,
@@ -158,12 +170,16 @@ class LoadingWidget extends StatelessWidget {
 
 class SearchResultWidget extends StatelessWidget {
   final List<Movie> items;
+  final ScrollController scrollController;
 
-  const SearchResultWidget({Key? key, required this.items}) : super(key: key);
+  const SearchResultWidget(
+      {Key? key, required this.items, required this.scrollController})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
+      controller: scrollController,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 20,
@@ -261,7 +277,7 @@ class EmptyWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Icon(
-            Icons.warning,
+            Icons.add_to_queue,
             color: Colors.yellowAccent,
             size: 80.0,
           ),

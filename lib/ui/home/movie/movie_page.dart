@@ -27,6 +27,12 @@ class _MoviePageState extends BasePageState<MoviePage> {
   }
 
   @override
+  void dispose() {
+    _movieBloc.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget buildUI(BuildContext context) {
     return Scaffold(
       body: StreamBuilder<Tuple3<List<Movie>, List<Movie>, List<Movie>>>(

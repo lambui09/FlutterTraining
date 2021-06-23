@@ -1,15 +1,19 @@
 import 'package:rxdart/rxdart.dart';
 import 'package:tuple/tuple.dart';
+import 'package:untitled/base/base_bloc.dart';
 import 'package:untitled/data/model/movie.dart';
 import 'package:untitled/data/source/remote/repository/movie_repository.dart';
-import 'package:untitled/data/source/remote/response/error_response.dart';
 
-class MovieBloc {
+class MovieBloc extends BaseBloc {
+  final Sink<void> loadData;
   final Stream<Tuple3<List<Movie>, List<Movie>, List<Movie>>> dataList;
 
-  MovieBloc._({required this.dataList});
+  MovieBloc._({required this.dataList, required this.loadData});
 
   factory MovieBloc(MovieRepository movieRepository) {
+    // ignore: close_sinks
+    final loadData = BehaviorSubject<void>.seeded(0);
+
     final sliderMoveListStream =
         Rx.fromCallable(() => movieRepository.getMovieList(3, 1));
 
@@ -20,18 +24,17 @@ class MovieBloc {
         Rx.fromCallable(() => movieRepository.getMovieList(5, 1))
             .onErrorReturn([]);
 
-    final dataList = Rx.zip3(
-            sliderMoveListStream,
-            nowMoveListStream,
-            popularMoveListStream,
-            (List<Movie> a, List<Movie> b, List<Movie> c) => Tuple3(a, b, c))
-        .doOnError((err, stacktrace) {
-      if (err is AppError) {
-        print('doOnError: ' + err.message);
-      }
-      print(stacktrace);
-    });
+    final dataList = loadData.flatMap((value) => Rx.zip3(
+        sliderMoveListStream,
+        nowMoveListStream,
+        popularMoveListStream,
+        (List<Movie> a, List<Movie> b, List<Movie> c) => Tuple3(a, b, c)));
 
-    return MovieBloc._(dataList: dataList);
+    return MovieBloc._(dataList: dataList, loadData: loadData);
+  }
+
+  @override
+  void dispose() {
+    loadData.close();
   }
 }
