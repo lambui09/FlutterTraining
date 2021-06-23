@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:untitled/utils/resource_app.dart';
+import 'package:untitled/utils/resource/image_app.dart';
 
 Widget buildImage(String? imageUrl, [BoxFit? fit]) {
-  Widget placeHolder = Image.asset(ResourceUtils.ic_logo);
+  Widget placeHolder = Image.asset(ImageApp.ic_logo);
   if (imageUrl == null) {
     return placeHolder;
   }

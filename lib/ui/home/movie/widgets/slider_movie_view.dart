@@ -34,12 +34,12 @@ class _SliderMovieViewState extends BaseViewState<SliderMovieView> {
     }
     return SizedBox(
       width: double.infinity,
-      height: screenHeight * 0.25,
+      height: screenHeight * 0.26,
       child: Column(
         children: [
           SizedBox(
             width: double.infinity,
-            height: screenHeight * 0.22,
+            height: screenHeight * 0.23,
             child: PageView.builder(
               onPageChanged: _onPageChanged,
               controller: _pageController,

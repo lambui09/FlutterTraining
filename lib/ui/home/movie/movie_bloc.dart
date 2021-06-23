@@ -17,7 +17,7 @@ class MovieBloc {
         Rx.fromCallable(() => movieRepository.getMovieList(1, 1));
 
     final popularMoveListStream =
-        Rx.fromCallable(() => movieRepository.getMovieList(4, 1))
+        Rx.fromCallable(() => movieRepository.getMovieList(5, 1))
             .onErrorReturn([]);
 
     final dataList = Rx.zip3(

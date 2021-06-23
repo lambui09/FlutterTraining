@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 abstract class BaseViewStateLess extends StatelessWidget {
+  const BaseViewStateLess({Key? key}) : super(key: key);
 }
 
 abstract class BaseViewStateFul extends StatefulWidget {
+  const BaseViewStateFul({Key? key}) : super(key: key);
 }
 
 abstract class BaseViewState<T extends BaseViewStateFul> extends State<T> {

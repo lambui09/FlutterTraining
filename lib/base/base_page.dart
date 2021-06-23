@@ -5,12 +5,10 @@ abstract class BasePage extends StatefulWidget {
 }
 
 abstract class BasePageState<T extends BasePage> extends State<T> {
-  double screenWidth = 0;
-  double screenHeight = 0;
 
   void init();
 
-  Widget renderUI(BuildContext context);
+  Widget buildUI(BuildContext context);
 
   @override
   void initState() {
@@ -20,9 +18,6 @@ abstract class BasePageState<T extends BasePage> extends State<T> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    screenHeight = size.height;
-    screenWidth = size.width;
-    return renderUI(context);
+    return buildUI(context);
   }
 }

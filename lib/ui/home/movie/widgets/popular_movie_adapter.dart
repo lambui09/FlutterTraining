@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/base/base_adapter.dart';
 import 'package:untitled/data/model/movie.dart';
-import 'package:untitled/utils/color_app.dart';
-import 'package:untitled/utils/string_app.dart';
+import 'package:untitled/utils/extension/size_ext.dart';
+import 'package:untitled/utils/resource/color_app.dart';
+import 'package:untitled/utils/resource/string_app.dart';
+
 import 'movie_item_view.dart';
 
 class PopularMovieAdapter extends BaseAdapter<Movie> {
@@ -10,13 +12,11 @@ class PopularMovieAdapter extends BaseAdapter<Movie> {
   static const double _imgHorizontalRatio = 210 / 140;
   static const double _titleHeight = 30;
 
-  @override
-  Widget renderUI(BuildContext context) {
-    if (dataList.isEmpty) {
-      return const SizedBox();
-    }
+  const PopularMovieAdapter(List<Movie> items) : super(items);
 
-    final double screenWidth = MediaQuery.of(context).size.width;
+  @override
+  Widget buildListItem(BuildContext context) {
+    final double screenWidth = getScreenWidth(context);
     final double itemW = screenWidth * 140 / 375;
     final double itemH = itemW * _imgHorizontalRatio;
 
@@ -25,7 +25,7 @@ class PopularMovieAdapter extends BaseAdapter<Movie> {
       child: Column(
         children: [
           _buildTitleHeader(),
-          _buildListView(),
+          _buildListItem(),
         ],
       ),
     );
@@ -45,7 +45,7 @@ class PopularMovieAdapter extends BaseAdapter<Movie> {
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.normal,
-              color: ColorUtils.color_text_102,
+              color: ColorApp.color_text_102,
             ),
           ),
         ),
@@ -53,7 +53,7 @@ class PopularMovieAdapter extends BaseAdapter<Movie> {
     );
   }
 
-  Widget _buildListView() {
+  Widget _buildListItem() {
     return Expanded(
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -66,7 +66,7 @@ class PopularMovieAdapter extends BaseAdapter<Movie> {
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.all(_padding),
         itemBuilder: (BuildContext context, int index) {
-          return MovieItemCell(MovieItemType.horizontalNoName, getItem(index)!,
+          return MovieItemCell(MovieItemType.horizontalNoName, getItem(index),
               (data) {
             print(data.posterUrl);
           });
