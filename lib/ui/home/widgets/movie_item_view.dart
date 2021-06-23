@@ -57,7 +57,7 @@ class MovieItemCell extends BaseItemCell<Movie> {
             child: Text(
               movie.title.toUpperCase(),
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 height: 1.3,
                 fontSize: 15,
                 color: ColorApp.color_text_33,
@@ -82,10 +82,7 @@ class MovieItemCell extends BaseItemCell<Movie> {
             buildImage(movie.posterUrl),
             Align(
               alignment: Alignment.topRight,
-              child: _buildAverage(
-                movie,
-                const EdgeInsets.only(top: 10, right: 10),
-              ),
+              child: buildAverage(movie),
             ),
           ],
         ),
@@ -112,15 +109,12 @@ class MovieItemCell extends BaseItemCell<Movie> {
                 buildImage(movie.backdropUrl, BoxFit.cover),
                 Align(
                   alignment: Alignment.topRight,
-                  child: _buildAverage(
-                    movie,
-                    const EdgeInsets.only(top: 10, right: 10),
-                  ),
+                  child: buildAverage(movie),
                 ),
               ],
             ),
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           Text(
             movie.title.toUpperCase(),
             textAlign: TextAlign.left,
@@ -135,16 +129,16 @@ class MovieItemCell extends BaseItemCell<Movie> {
     );
   }
 
-  Widget _buildAverage(Movie movie, EdgeInsets margin) {
+  static Widget buildAverage(Movie movie) {
     return Container(
-      margin: margin,
+      margin: const EdgeInsets.only(top: 10, right: 10),
       width: 32,
       height: 32,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
         child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
+          decoration: const BoxDecoration(
+            gradient: const LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
@@ -156,16 +150,16 @@ class MovieItemCell extends BaseItemCell<Movie> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                data.firstAverage(),
-                style: TextStyle(color: Colors.white, fontSize: 20),
+                movie.firstAverage(),
+                style: const TextStyle(color: Colors.white, fontSize: 20),
               ),
               Text(
                 '.',
-                style: TextStyle(color: Colors.white, fontSize: 12),
+                style: const TextStyle(color: Colors.white, fontSize: 12),
               ),
               Text(
-                data.lastAverage(),
-                style: TextStyle(color: Colors.white, fontSize: 14),
+                movie.lastAverage(),
+                style: const TextStyle(color: Colors.white, fontSize: 14),
               ),
             ],
           ),
