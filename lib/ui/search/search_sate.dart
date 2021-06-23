@@ -9,10 +9,10 @@ class SearchError extends SearchState {}
 
 class SearchNoTerm extends SearchState {}
 
-class SearchPopulated extends SearchState {
+class SearchResult extends SearchState {
   final List<Movie> items;
 
-  SearchPopulated(this.items);
+  SearchResult(this.items);
 }
 
 class SearchEmpty extends SearchState {}
