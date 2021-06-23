@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/base/base_page.dart';
 import 'package:untitled/ui/home/tv/tv_page.dart';
+import 'package:untitled/ui/search/search_page.dart';
+import 'package:untitled/utils/navigate_utils.dart';
 import 'package:untitled/utils/resource/color_app.dart';
 import 'package:untitled/utils/resource/image_app.dart';
 import 'package:untitled/utils/resource/string_app.dart';
@@ -81,7 +83,9 @@ class _HomePageState extends BasePageState<HomePage> {
           width: height,
           child: InkWell(
             customBorder: CircleBorder(),
-            onTap: () {},
+            onTap: () {
+              NavigateUtils.pushActivity(context, SearchPage());
+            },
             child: Padding(
               padding: EdgeInsets.all(16.0),
               child: Image.asset(ImageApp.ic_search, fit: BoxFit.cover),

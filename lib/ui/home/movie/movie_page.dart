@@ -5,10 +5,9 @@ import 'package:untitled/base/base_page.dart';
 import 'package:untitled/data/model/movie.dart';
 import 'package:untitled/data/source/remote/repository/movie_repository.dart';
 import 'package:untitled/ui/home/movie/movie_bloc.dart';
-
-import 'widgets/now_movie_adapter.dart';
-import 'widgets/popular_movie_adapter.dart';
-import 'widgets/slider_movie_view.dart';
+import 'package:untitled/ui/home/widgets/now_movie_adapter.dart';
+import 'package:untitled/ui/home/widgets/popular_movie_adapter.dart';
+import 'package:untitled/ui/home/widgets/slider_movie_view.dart';
 
 class MoviePage extends BasePage {
   const MoviePage({Key? key}) : super(key: key);

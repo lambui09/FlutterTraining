@@ -2,7 +2,7 @@ import 'package:untitled/data/model/movie.dart';
 import 'package:untitled/data/source/remote/repository/base_repository.dart';
 
 class MovieResponse {
-  final String id;
+  final int id;
   final String title;
   final String posterUrl;
   final String backdropUrl;
@@ -16,7 +16,7 @@ class MovieResponse {
       required this.voteAverage});
 
   factory MovieResponse.fromJson(Map<String, dynamic> json) => MovieResponse(
-        id: jsonDecode(json, "media_type"),
+        id: (jsonDecode(json, "id") as num).toInt(),
         title: jsonDecode(json, "title"),
         posterUrl: KeyPrams.imgPath + jsonDecode(json, "poster_path"),
         backdropUrl: KeyPrams.imgPath + jsonDecode(json, 'backdrop_path'),

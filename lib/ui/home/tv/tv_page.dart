@@ -4,9 +4,9 @@ import 'package:tuple/tuple.dart';
 import 'package:untitled/base/base_page.dart';
 import 'package:untitled/data/model/movie.dart';
 import 'package:untitled/data/source/remote/repository/movie_repository.dart';
-import 'package:untitled/ui/home/movie/widgets/movie_item_view.dart';
-import 'package:untitled/ui/home/movie/widgets/now_movie_adapter.dart';
 import 'package:untitled/ui/home/tv/tv_block.dart';
+import 'package:untitled/ui/home/widgets/movie_item_view.dart';
+import 'package:untitled/ui/home/widgets/now_movie_adapter.dart';
 import 'package:untitled/utils/resource/color_app.dart';
 import 'package:untitled/utils/resource/string_app.dart';
 
