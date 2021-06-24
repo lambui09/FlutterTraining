@@ -4,11 +4,12 @@ import 'package:untitled/base/base_bloc.dart';
 import 'package:untitled/data/model/movie.dart';
 import 'package:untitled/data/source/remote/repository/movie_repository.dart';
 
-class MovieBloc extends BaseBloc {
+class MovieBloc extends BaseBloc<EmptyState> {
   final Sink<void> loadData;
   final Stream<Tuple3<List<Movie>, List<Movie>, List<Movie>>> dataList;
 
-  MovieBloc._({required this.dataList, required this.loadData});
+  MovieBloc._({required this.dataList, required this.loadData})
+      : super(EmptyState());
 
   factory MovieBloc(MovieRepository movieRepository) {
     // ignore: close_sinks

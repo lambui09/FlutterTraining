@@ -1,13 +1,14 @@
 import 'dart:async';
 
 import 'package:rxdart/rxdart.dart';
+import 'package:untitled/base/base_bloc.dart';
 import 'package:untitled/data/source/remote/repository/movie_repository.dart';
 
 import 'search_sate.dart';
 
-class SearchBloc {
+class SearchBloc extends BaseBloc<SearchState> {
   final Sink<String> onTextChanged;
-  final Stream<SearchState> state;
+  final Stream<SearchState> searchStream;
 
   factory SearchBloc(MovieRepository movieRepository) {
     // ignore: close_sinks
@@ -22,8 +23,9 @@ class SearchBloc {
     return SearchBloc._(onTextChanged, state);
   }
 
-  SearchBloc._(this.onTextChanged, this.state);
+  SearchBloc._(this.onTextChanged, this.searchStream) : super(SearchEmpty());
 
+  @override
   void dispose() {
     onTextChanged.close();
   }

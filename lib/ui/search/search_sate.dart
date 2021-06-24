@@ -1,7 +1,7 @@
-// Stream<String>. We call this Stream the onTextChanged "intent".
+import 'package:untitled/base/base_bloc.dart';
 import 'package:untitled/data/model/movie.dart';
 
-class SearchState {}
+class SearchState extends BaseState {}
 
 class SearchLoading extends SearchState {}
 
