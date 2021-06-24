@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/base/base_page.dart';
-import 'package:untitled/ui/home/home_page.dart';
+import 'package:untitled/ui/home/main_page.dart';
 import 'package:untitled/utils/extension/size_ext.dart';
 import 'package:untitled/utils/navigate_utils.dart';
 
-class TutorialPage extends BasePage {
+class TutorialPage extends BaseStateFul {
   const TutorialPage({Key? key}) : super(key: key);
 
   static const String routeName = "/tutorial";
@@ -13,7 +13,7 @@ class TutorialPage extends BasePage {
   _TutorialPageState createState() => _TutorialPageState();
 }
 
-class _TutorialPageState extends BasePageState<TutorialPage> {
+class _TutorialPageState extends BaseState<TutorialPage> {
   String getTitle() => _titleList[_currentPage];
   static const List<String> _titleList = [
     "Get the first\nMovie &TV\ninformation",
@@ -236,7 +236,7 @@ class _TutorialPageState extends BasePageState<TutorialPage> {
 
   void _nextPage(BuildContext context) {
     if (_isLastPage) {
-      NavigateUtils.pushToRootActivity(context, HomePage());
+      NavigateUtils.pushNamedToRoot(context, MainPage.routeName);
       return;
     }
     _pageController.animateToPage(_currentPage + 1,

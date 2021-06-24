@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:untitled/base/base_page.dart';
 import 'package:untitled/data/model/movie.dart';
-import 'package:untitled/data/source/remote/repository/movie_repository.dart';
 import 'package:untitled/ui/home/widgets/movie_item_view.dart';
 import 'package:untitled/utils/extension/image_etx.dart';
 import 'package:untitled/utils/resource/color_app.dart';
@@ -10,21 +9,20 @@ import 'package:untitled/utils/resource/color_app.dart';
 import 'search_bloc.dart';
 import 'search_sate.dart';
 
-class SearchPage extends BasePage {
+class SearchPage extends BaseStateFul {
+  static const String routeName = "/search";
+
   const SearchPage({Key? key}) : super(key: key);
 
   @override
   _SearchPageState createState() => _SearchPageState();
 }
 
-class _SearchPageState extends BasePageState<SearchPage> {
-  late SearchBloc _searchBloc;
+class _SearchPageState extends BaseBlocState<SearchPage, SearchBloc> {
   late ScrollController _scrollController;
 
   @override
   void init() {
-    _searchBloc = SearchBloc(RepositoryProvider.of<MovieRepository>(context));
-
     _scrollController = ScrollController();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels + 100 >=
@@ -35,46 +33,43 @@ class _SearchPageState extends BasePageState<SearchPage> {
   }
 
   @override
-  void dispose() {
-    _searchBloc.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget buildUI(BuildContext context) {
     return StreamBuilder<SearchState>(
-      stream: _searchBloc.state,
+      stream: bloc.searchStream,
       initialData: SearchNoTerm(),
       builder: (context, snapshot) {
         final state = snapshot.data;
         return Scaffold(
           body: Stack(
             children: <Widget>[
-              Flex(direction: Axis.vertical, children: <Widget>[
-                SafeArea(
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Search Movie, Tv...',
+              Flex(
+                direction: Axis.vertical,
+                children: <Widget>[
+                  SafeArea(
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Search Movie, Tv...',
+                        ),
+                        style: TextStyle(
+                          fontSize: 36.0,
+                          fontFamily: 'Hind',
+                          decoration: TextDecoration.none,
+                        ),
+                        onChanged: bloc.onTextChanged.add,
                       ),
-                      style: TextStyle(
-                        fontSize: 36.0,
-                        fontFamily: 'Hind',
-                        decoration: TextDecoration.none,
-                      ),
-                      onChanged: _searchBloc.onTextChanged.add,
                     ),
                   ),
-                ),
-                Expanded(
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 300),
-                    child: _buildChild(state!),
+                  Expanded(
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      child: _buildChild(state!),
+                    ),
                   ),
-                )
-              ])
+                ],
+              )
             ],
           ),
         );

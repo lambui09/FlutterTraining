@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:untitled/base/base_page.dart';
 
 class NavigateUtils {
-  static void pushActivity(BuildContext context, BasePage widget) {
-    MaterialPageRoute route = MaterialPageRoute(builder: (context) => widget);
-    Navigator.of(context).push(route);
+  static void pushNamed(BuildContext context, String routeName,
+      [Object? arguments]) {
+    Navigator.pushNamed(context, routeName, arguments: arguments);
   }
 
-  static void popActivity(BuildContext context) {
-    Navigator.of(context).pop();
-  }
-
-  static void pushToRootActivity(BuildContext context, BasePage widget) {
-    MaterialPageRoute route = MaterialPageRoute(builder: (context) => widget);
-    Navigator.of(context).pushReplacement(route);
+  static void pushNamedToRoot(BuildContext context, String routeName,
+      [Object? arguments]) {
+    Navigator.pushReplacementNamed(context, routeName, arguments: arguments);
   }
 }

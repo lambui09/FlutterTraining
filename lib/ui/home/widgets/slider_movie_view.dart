@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:untitled/base/base_view.dart';
+import 'package:untitled/base/base_page.dart';
 import 'package:untitled/data/model/movie.dart';
 import 'package:untitled/utils/extension/image_etx.dart';
+import 'package:untitled/utils/extension/size_ext.dart';
 
-class SliderMovieView extends BaseViewStateFul {
+class SliderMovieView extends BaseStateFul {
   SliderMovieView(this.dataList);
 
   final List<Movie> dataList;
@@ -14,7 +15,7 @@ class SliderMovieView extends BaseViewStateFul {
   _SliderMovieViewState createState() => _SliderMovieViewState();
 }
 
-class _SliderMovieViewState extends BaseViewState<SliderMovieView> {
+class _SliderMovieViewState extends BaseState<SliderMovieView> {
   final PageController _pageController = PageController(viewportFraction: 0.9);
   int _currentPage = 0;
 
@@ -28,18 +29,18 @@ class _SliderMovieViewState extends BaseViewState<SliderMovieView> {
   void init() {}
 
   @override
-  Widget renderUI(BuildContext context) {
+  Widget buildUI(BuildContext context) {
     if (widget.dataList.isEmpty) {
       return const SizedBox();
     }
     return SizedBox(
       width: double.infinity,
-      height: screenHeight * 0.26,
+      height: getScreenHeight(context) * 0.26,
       child: Column(
         children: [
           SizedBox(
             width: double.infinity,
-            height: screenHeight * 0.23,
+            height: getScreenHeight(context) * 0.23,
             child: PageView.builder(
               onPageChanged: _onPageChanged,
               controller: _pageController,

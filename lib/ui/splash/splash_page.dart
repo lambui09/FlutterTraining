@@ -4,7 +4,7 @@ import 'package:untitled/ui/tutorial/tutorial_page.dart';
 import 'package:untitled/utils/extension/size_ext.dart';
 import 'package:untitled/utils/navigate_utils.dart';
 
-class SplashPage extends BasePage {
+class SplashPage extends BaseStateFul {
   const SplashPage({Key? key}) : super(key: key);
 
   static const String routeName = "/splash";
@@ -13,7 +13,7 @@ class SplashPage extends BasePage {
   _SplashPageState createState() => _SplashPageState();
 }
 
-class _SplashPageState extends BasePageState<SplashPage> {
+class _SplashPageState extends BaseState<SplashPage> {
   @override
   void init() {}
 
@@ -50,7 +50,8 @@ class _SplashPageState extends BasePageState<SplashPage> {
                 TextButton(
                   style: TextButton.styleFrom(primary: Colors.black),
                   onPressed: () {
-                    NavigateUtils.pushToRootActivity(context, TutorialPage());
+                    NavigateUtils.pushNamedToRoot(
+                        context, TutorialPage.routeName);
                   },
                   child: Text(
                     'Flutter Training'.toUpperCase(),

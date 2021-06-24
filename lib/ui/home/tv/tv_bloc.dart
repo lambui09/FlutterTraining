@@ -1,13 +1,14 @@
 import 'package:rxdart/rxdart.dart';
 import 'package:tuple/tuple.dart';
+import 'package:untitled/base/base_bloc.dart';
 import 'package:untitled/data/model/movie.dart';
 import 'package:untitled/data/source/remote/repository/movie_repository.dart';
 import 'package:untitled/data/source/remote/response/error_response.dart';
 
-class TvBloc {
+class TvBloc extends BaseBloc<EmptyState> {
   final Stream<Tuple2<List<Movie>, List<Movie>>> dataList;
 
-  TvBloc._({required this.dataList});
+  TvBloc._({required this.dataList}) : super(EmptyState());
 
   factory TvBloc(MovieRepository movieRepository) {
     final nowMoveListStream =
@@ -28,5 +29,9 @@ class TvBloc {
     });
 
     return TvBloc._(dataList: dataList);
+  }
+
+  @override
+  void dispose() {
   }
 }

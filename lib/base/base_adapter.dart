@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:untitled/base/base_view.dart';
+import 'package:untitled/base/base_page.dart';
 
-abstract class BaseAdapter<T> extends BaseViewStateLess {
+abstract class BaseAdapter<T> extends BaseStateLess {
   const BaseAdapter(this.items);
 
   final List<T> items;
@@ -21,7 +21,7 @@ abstract class BaseAdapter<T> extends BaseViewStateLess {
   }
 }
 
-abstract class BaseItemCell<T> extends BaseViewStateLess {
+abstract class BaseItemCell<T> extends BaseStateLess {
   final T data;
   final Function(T)? onTap;
 

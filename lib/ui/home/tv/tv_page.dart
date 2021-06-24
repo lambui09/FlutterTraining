@@ -3,35 +3,31 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tuple/tuple.dart';
 import 'package:untitled/base/base_page.dart';
 import 'package:untitled/data/model/movie.dart';
-import 'package:untitled/data/source/remote/repository/movie_repository.dart';
-import 'package:untitled/ui/home/tv/tv_block.dart';
+import 'package:untitled/ui/home/tv/tv_bloc.dart';
 import 'package:untitled/ui/home/widgets/movie_item_view.dart';
 import 'package:untitled/ui/home/widgets/now_movie_adapter.dart';
 import 'package:untitled/utils/resource/color_app.dart';
 import 'package:untitled/utils/resource/string_app.dart';
 
-class TvPage extends BasePage {
+class TvPage extends BaseStateFul {
   const TvPage({Key? key}) : super(key: key);
 
-  static const String routerName = "/tv";
+  static const String routeName = "/tv";
 
   @override
   _TvPageState createState() => _TvPageState();
 }
 
-class _TvPageState extends BasePageState<TvPage> {
-  late TvBloc _tvBloc;
+class _TvPageState extends BaseBlocState<TvPage, TvBloc> {
 
   @override
-  void init() {
-    _tvBloc = TvBloc(RepositoryProvider.of<MovieRepository>(context));
-  }
+  void init() {}
 
   @override
   Widget buildUI(BuildContext context) {
     return Scaffold(
       body: StreamBuilder<Tuple2<List<Movie>, List<Movie>>>(
-        stream: _tvBloc.dataList,
+        stream: bloc.dataList,
         builder: (context, snapshot) {
           final data = snapshot.data;
           final nowMovieList = data?.item1 ?? [];
