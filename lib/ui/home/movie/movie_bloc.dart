@@ -15,15 +15,15 @@ class MovieBloc extends BaseBloc<EmptyState> {
     // ignore: close_sinks
     final loadData = BehaviorSubject<void>.seeded(0);
 
-    final sliderMoveListStream =
-        Rx.fromCallable(() => movieRepository.getMovieList(3, 1));
+    final sliderMoveListStream = Rx.fromCallable(
+        () => movieRepository.getMovieList(MovieTypeStatus.moviePopular));
 
-    final nowMoveListStream =
-        Rx.fromCallable(() => movieRepository.getMovieList(1, 1));
+    final nowMoveListStream = Rx.fromCallable(
+        () => movieRepository.getMovieList(MovieTypeStatus.movieNow));
 
-    final popularMoveListStream =
-        Rx.fromCallable(() => movieRepository.getMovieList(5, 1))
-            .onErrorReturn([]);
+    final popularMoveListStream = Rx.fromCallable(
+            () => movieRepository.getMovieList(MovieTypeStatus.tvPopular))
+        .onErrorReturn([]);
 
     final dataList = loadData.flatMap((value) => Rx.zip3(
         sliderMoveListStream,

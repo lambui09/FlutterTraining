@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/base/base_adapter.dart';
 import 'package:untitled/data/model/movie.dart';
+import 'package:untitled/ui/home/detail/movie_detail_page.dart';
 import 'package:untitled/utils/extension/size_ext.dart';
+import 'package:untitled/utils/navigate_utils.dart';
 import 'package:untitled/utils/resource/color_app.dart';
 import 'package:untitled/utils/resource/string_app.dart';
 
@@ -68,7 +70,8 @@ class PopularMovieAdapter extends BaseAdapter<Movie> {
         itemBuilder: (BuildContext context, int index) {
           return MovieItemCell(MovieItemType.horizontalNoName, getItem(index),
               (data) {
-            print(data.posterUrl);
+            NavigateUtils.pushNamed(context, MovieDetailPage.routeName,
+                arguments: data, rootNavigator: true);
           });
         },
       ),

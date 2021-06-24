@@ -4,6 +4,9 @@ class Movie {
   final String posterUrl;
   final String backdropUrl;
   final String voteAverage;
+  final String overview;
+  final String releaseDate;
+  final int voteCount;
 
   Movie(
     this.id,
@@ -11,6 +14,9 @@ class Movie {
     this.posterUrl,
     this.backdropUrl,
     this.voteAverage,
+    this.overview,
+    this.releaseDate,
+    this.voteCount,
   );
 
   String firstAverage() => voteAverage.substring(0, 1);

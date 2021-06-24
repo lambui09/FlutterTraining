@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:untitled/base/base_page.dart';
+import 'package:untitled/data/model/movie.dart';
 import 'package:untitled/data/source/remote/repository/movie_repository.dart';
+import 'package:untitled/ui/home/detail/movie_detail_bloc.dart';
 import 'package:untitled/ui/home/main_bloc.dart';
 import 'package:untitled/ui/home/movie/movie_bloc.dart';
 import 'package:untitled/ui/home/nav_scaffold.dart';
@@ -9,6 +11,7 @@ import 'package:untitled/ui/home/tv/tv_bloc.dart';
 import 'package:untitled/ui/home/tv/tv_page.dart';
 import 'package:untitled/utils/resource/string_app.dart';
 
+import 'detail/movie_detail_page.dart';
 import 'movie/movie_page.dart';
 
 class MainPage extends BaseStateFul {

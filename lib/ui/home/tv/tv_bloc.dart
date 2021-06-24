@@ -11,13 +11,13 @@ class TvBloc extends BaseBloc<EmptyState> {
   TvBloc._({required this.dataList}) : super(EmptyState());
 
   factory TvBloc(MovieRepository movieRepository) {
-    final nowMoveListStream =
-        Rx.fromCallable(() => movieRepository.getMovieList(6, 1))
-            .onErrorReturn([]);
+    final nowMoveListStream = Rx.fromCallable(
+            () => movieRepository.getMovieList(MovieTypeStatus.tvNow))
+        .onErrorReturn([]);
 
-    final popularMoveListStream =
-        Rx.fromCallable(() => movieRepository.getMovieList(7, 1))
-            .onErrorReturn([]);
+    final popularMoveListStream = Rx.fromCallable(
+            () => movieRepository.getMovieList(MovieTypeStatus.tvPopular))
+        .onErrorReturn([]);
 
     final dataList = Rx.zip2(nowMoveListStream, popularMoveListStream,
             (List<Movie> a, List<Movie> b) => Tuple2(a, b))
@@ -32,6 +32,5 @@ class TvBloc extends BaseBloc<EmptyState> {
   }
 
   @override
-  void dispose() {
-  }
+  void dispose() {}
 }

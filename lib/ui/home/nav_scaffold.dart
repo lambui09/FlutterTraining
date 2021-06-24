@@ -20,15 +20,36 @@ class NavigationScaffold extends BaseStateFul {
 
   @override
   _NavigationScaffoldState createState() => _NavigationScaffoldState();
+
+  static NavigatorState? of(BuildContext context, {int? newTabIndex}) {
+    final appState =
+        context.findAncestorStateOfType<_NavigationScaffoldState>();
+
+    if (appState == null) {
+      return null;
+    }
+
+    final currentIndex = appState.currentIndex;
+    final navigatorKeys = appState.navigatorKeys;
+
+    if (newTabIndex != null &&
+        newTabIndex != currentIndex &&
+        appState.mounted) {
+      appState.onItemTapped(newTabIndex);
+      return navigatorKeys[newTabIndex].currentState ?? null;
+    }
+
+    return navigatorKeys[currentIndex].currentState ?? null;
+  }
 }
 
 class _NavigationScaffoldState extends BaseState<NavigationScaffold> {
-  var _currentIndex = 0;
-  var _navigatorKeys = <GlobalKey<NavigatorState>>[];
+  var currentIndex = 0;
+  var navigatorKeys = <GlobalKey<NavigatorState>>[];
 
   @override
   void init() {
-    _navigatorKeys = List.generate(
+    navigatorKeys = List.generate(
       widget.navBuilders.length,
       (none) => GlobalKey<NavigatorState>(),
     );
@@ -56,11 +77,11 @@ class _NavigationScaffoldState extends BaseState<NavigationScaffold> {
 
   Widget _buildBody() {
     return IndexedStack(
-      index: _currentIndex,
+      index: currentIndex,
       children: [
         for (int i = 0; i < widget.navBuilders.length; i++)
           Navigator(
-            key: _navigatorKeys[i],
+            key: navigatorKeys[i],
             onGenerateRoute: (settings) => MaterialPageRoute(
               settings: settings,
               builder: (context) => widget.navBuilders[i](context, settings),
@@ -70,12 +91,12 @@ class _NavigationScaffoldState extends BaseState<NavigationScaffold> {
     );
   }
 
-  Widget _buildHeader() => HeaderApp(_currentIndex);
+  Widget _buildHeader() => HeaderApp(currentIndex);
 
   Widget _buildBottomNav() {
     return BottomNavigationBar(
       items: widget.barItems,
-      currentIndex: _currentIndex,
+      currentIndex: currentIndex,
       selectedItemColor: ColorApp.color_tabBar_selected_text,
       unselectedItemColor: ColorApp.color_tabBar_un_selected_text,
       onTap: onItemTapped,
@@ -83,14 +104,14 @@ class _NavigationScaffoldState extends BaseState<NavigationScaffold> {
   }
 
   Future<bool> _onWillPop() {
-    final navigatorState = _navigatorKeys[_currentIndex].currentState;
+    final navigatorState = navigatorKeys[currentIndex].currentState;
     final canPop = navigatorState?.canPop() ?? false;
 
     if (canPop) {
       navigatorState?.maybePop();
     }
 
-    if (!canPop && _currentIndex > 0) {
+    if (!canPop && currentIndex > 0) {
       onItemTapped(0);
       return Future.value(false);
     }
@@ -99,11 +120,11 @@ class _NavigationScaffoldState extends BaseState<NavigationScaffold> {
   }
 
   void onItemTapped(int index) {
-    if (_currentIndex == index) {
-      _navigatorKeys[index].currentState?.popUntil((route) => route.isFirst);
+    if (currentIndex == index) {
+      navigatorKeys[index].currentState?.popUntil((route) => route.isFirst);
       return;
     }
-    setState(() => _currentIndex = index);
+    setState(() => currentIndex = index);
   }
 }
 

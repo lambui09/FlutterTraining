@@ -8,7 +8,10 @@ import 'package:untitled/ui/search/search_page.dart';
 import 'package:untitled/ui/splash/splash_page.dart';
 import 'package:untitled/ui/tutorial/tutorial_page.dart';
 
+import 'data/model/movie.dart';
 import 'data/source/remote/repository/movie_repository.dart';
+import 'ui/home/detail/movie_detail_bloc.dart';
+import 'ui/home/detail/movie_detail_page.dart';
 
 final apiService = ApiService();
 final movieRepository = MovieRepositoryImpl(apiService);
@@ -33,7 +36,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     final routes = <String, WidgetBuilder>{
       SplashPage.routeName: (context) => SplashPage(),
       TutorialPage.routeName: (context) => TutorialPage(),
@@ -49,6 +51,13 @@ class MyApp extends StatelessWidget {
           child: SearchPage(),
         );
       },
+      MovieDetailPage.routeName: (context) {
+        Movie movie = ModalRoute.of(context)?.settings.arguments as Movie;
+        return BlocProvider(
+          create: (context) => MovieDetailBloc(),
+          child: MovieDetailPage(movie: movie),
+        );
+      }
     };
 
     return MaterialApp(
