@@ -7,4 +7,6 @@ class StringApp {
   static const String now = 'Now';
   static const String popular = 'Popular';
 
+  static const String back = 'Back';
+  static const String people_awaiting = 'People Awaiting';
 }

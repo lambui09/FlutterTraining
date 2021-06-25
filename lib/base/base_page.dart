@@ -38,13 +38,16 @@ abstract class BaseBlocState<T extends BaseStateFul, B extends BaseBloc>
   @override
   void initState() {
     super.initState();
+    print('--------------------------------');
+    print('initState $T, $B');
     bloc = BlocProvider.of<B>(context);
     init();
   }
 
   @override
-  void dispose() {
-    print('Dispose BasePageBlocState');
+  void dispose() async {
+    print('--------------------------------');
+    print('Dispose $T');
     bloc.dispose();
     super.dispose();
   }

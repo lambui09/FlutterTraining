@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:untitled/base/base_page.dart';
 import 'package:untitled/data/model/movie.dart';
+import 'package:untitled/ui/home/detail/movie_detail_page.dart';
 import 'package:untitled/ui/home/widgets/movie_item_view.dart';
 import 'package:untitled/utils/extension/image_etx.dart';
+import 'package:untitled/utils/navigate_utils.dart';
 import 'package:untitled/utils/resource/color_app.dart';
 
 import 'search_bloc.dart';
@@ -235,29 +236,8 @@ class SearchResultWidget extends StatelessWidget {
   }
 
   void showItem(BuildContext context, Movie item) {
-    Navigator.push(
-      context,
-      MaterialPageRoute<Null>(
-        builder: (BuildContext context) {
-          return Scaffold(
-            body: GestureDetector(
-              key: Key(item.backdropUrl),
-              onTap: () => Navigator.pop(context),
-              child: SizedBox.expand(
-                child: Hero(
-                  tag: item.id,
-                  child: Image.network(
-                    item.posterUrl,
-                    width: double.infinity,
-                    height: 300.0,
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
+    NavigateUtils.pushNamed(context, MovieDetailPage.routeName,
+        arguments: item);
   }
 }
 

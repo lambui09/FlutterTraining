@@ -19,7 +19,6 @@ class KeyPrams {
   static const String v3_tv_now = '/3/tv/airing_today';
   static const String v3_tv_popular = '/3/tv/popular';
   static const String v3_tv = '/3/tv/';
-
 }
 
 Uri createUri(String path, [Map<String, String>? queryParameters]) {
@@ -35,15 +34,19 @@ Uri createUri(String path, [Map<String, String>? queryParameters]) {
   return Uri.https(baseUrl, path, query);
 }
 
-dynamic jsonDecode(Map<String, dynamic> json, String key) {
+dynamic jsonDecode(Map<String, dynamic> json, String key,
+    {String? alternativeKey}) {
   try {
     dynamic data = json[key];
     if (data == null) {
-      print('Parse Json Error key = $key');
-      return "";
+      if (alternativeKey != null) {
+        return jsonDecode(json, alternativeKey);
+      }
+      print('Parse Json NULL key = $key');
+      return '';
     }
     return data;
-  } on Exception catch (e) {
-    print('Parse Json Error key = $key');
+  } catch (e) {
+    print('Parse Error: $e, Key = $key');
   }
 }
