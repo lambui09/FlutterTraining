@@ -1,4 +1,4 @@
-import 'package:untitled/utils/constants.dart';
+import 'package:untitled/utils/env.dart';
 
 class KeyPrams {
   static const String imgPath = 'https://image.tmdb.org/t/p/w500/';
@@ -22,8 +22,8 @@ class KeyPrams {
 }
 
 Uri createUri(String path, [Map<String, String>? queryParameters]) {
-  String baseUrl = Constants.instance.endpoint;
-  String apiKey = Constants.instance.apiKey;
+  String baseUrl = Environment.instance.endpoint;
+  String apiKey = Environment.instance.apiKey;
 
   Map<String, String> query = {KeyPrams.apiKey: apiKey};
 
