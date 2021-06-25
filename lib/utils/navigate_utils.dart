@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class NavigateUtils {
   static void pushNamed(BuildContext context, String routeName,
       {Object? arguments, bool rootNavigator = false}) {
-
     Navigator.of(context, rootNavigator: rootNavigator)
         .pushNamed(routeName, arguments: arguments);
   }
@@ -11,5 +10,10 @@ class NavigateUtils {
   static void pushNamedToRoot(BuildContext context, String routeName,
       [Object? arguments]) {
     Navigator.pushReplacementNamed(context, routeName, arguments: arguments);
+  }
+
+  static void pop(BuildContext context,
+      {Object? arguments, bool rootNavigator = false}) {
+    Navigator.of(context, rootNavigator: rootNavigator).pop(arguments);
   }
 }

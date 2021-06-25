@@ -33,45 +33,42 @@ class _SliderMovieViewState extends BaseState<SliderMovieView> {
     if (widget.dataList.isEmpty) {
       return const SizedBox();
     }
-    return SizedBox(
-      width: double.infinity,
-      height: getScreenHeight(context) * 0.26,
-      child: Column(
-        children: [
-          SizedBox(
-            width: double.infinity,
-            height: getScreenHeight(context) * 0.23,
-            child: PageView.builder(
-              onPageChanged: _onPageChanged,
-              controller: _pageController,
-              itemCount: widget.size(),
-              itemBuilder: (context, index) {
-                return _buildItemSlider(index);
-              },
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          height: 170 / 320 * getScreenWidth(context),
+          child: PageView.builder(
+            onPageChanged: _onPageChanged,
+            controller: _pageController,
+            itemCount: widget.size(),
+            itemBuilder: (context, index) {
+              return _buildItemSlider(index);
+            },
+          ),
+        ),
+        SizedBox(
+          height: 20,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(
+              widget.size(),
+              (index) => _buildDotNav(index),
             ),
           ),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                widget.size(),
-                (index) => _buildDotNav(index),
-              ),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   EdgeInsets _marginSlider(int index) {
     if (index == 0) {
-      return EdgeInsets.only(left: 0, right: 10, bottom: 20);
+      return EdgeInsets.only(left: 0, right: 10, bottom: 15);
     }
     if (index == widget.size()) {
-      return EdgeInsets.only(left: 10, right: 0, bottom: 20);
+      return EdgeInsets.only(left: 10, right: 0, bottom: 15);
     }
-    return EdgeInsets.only(left: 10, right: 10, bottom: 20);
+    return EdgeInsets.only(left: 10, right: 10, bottom: 15);
   }
 
   Widget _buildItemSlider(int index) {

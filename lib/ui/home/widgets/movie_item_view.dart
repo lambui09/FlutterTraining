@@ -47,7 +47,10 @@ class MovieItemCell extends BaseItemCell<Movie> {
             borderRadius: BorderRadius.circular(24),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(6),
-              child: buildImage(movie.posterUrl),
+              child: Hero(
+                tag: movie.id,
+                child: buildImage(movie.posterUrl),
+              ),
             ),
           ),
         ),
@@ -79,7 +82,10 @@ class MovieItemCell extends BaseItemCell<Movie> {
         borderRadius: BorderRadius.circular(6),
         child: Stack(
           children: [
-            buildImage(movie.posterUrl),
+            Hero(
+              tag: movie.id,
+              child: buildImage(movie.posterUrl),
+            ),
             Align(
               alignment: Alignment.topRight,
               child: buildAverage(movie),
@@ -91,32 +97,41 @@ class MovieItemCell extends BaseItemCell<Movie> {
   }
 
   Widget _buildVerticalFullWidth(BuildContext context, Movie movie) {
+    final double imgHeight = 160 / 335 * getScreenWidth(context);
     return Container(
       margin: const EdgeInsets.symmetric(
           horizontal: _padding * 2, vertical: _padding),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          PhysicalModel(
-            shape: BoxShape.rectangle,
-            clipBehavior: Clip.antiAlias,
-            color: Colors.black,
-            elevation: 20,
-            shadowColor: Colors.black,
-            borderRadius: BorderRadius.circular(8),
-            child: Stack(
-              children: [
-                buildImage(movie.backdropUrl, BoxFit.cover),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: buildAverage(movie),
-                ),
-              ],
+          Container(
+            width: double.infinity,
+            height: imgHeight,
+            child: PhysicalModel(
+              shape: BoxShape.rectangle,
+              clipBehavior: Clip.antiAlias,
+              color: Colors.black,
+              elevation: 20,
+              shadowColor: Colors.black,
+              borderRadius: BorderRadius.circular(8),
+              child: Stack(
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: buildImage(movie.backdropUrl, BoxFit.cover),
+                  ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: buildAverage(movie),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 12),
           Text(
-            movie.title.toUpperCase(),
+            data.title.toUpperCase(),
             textAlign: TextAlign.left,
             style: TextStyle(
               height: 1.3,
