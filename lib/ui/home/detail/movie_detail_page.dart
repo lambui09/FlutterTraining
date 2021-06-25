@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:untitled/base/base_page.dart';
 import 'package:untitled/data/model/movie.dart';
@@ -7,6 +8,7 @@ import 'package:untitled/utils/extension/image_etx.dart';
 import 'package:untitled/utils/extension/size_ext.dart';
 import 'package:untitled/utils/navigate_utils.dart';
 import 'package:untitled/utils/resource/color_app.dart';
+import 'package:untitled/utils/resource/image_app.dart';
 import 'package:untitled/utils/resource/string_app.dart';
 
 class MovieDetailPage extends BaseStateFul {
@@ -27,33 +29,36 @@ class _MovieDetailPageState
 
   @override
   Widget buildUI(BuildContext context) {
-    final screenWidth = getScreenWidth(context);
-    final heightImageHeader = 300 / 375 * screenWidth;
-    final heightContentHeader = 188 * 375 / screenWidth;
     return Scaffold(
       body: Stack(
         children: [
-          SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+          _buildContentScroll(context),
+          _BackButton(margin: const EdgeInsets.only(left: 20, top: 20)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildContentScroll(BuildContext context) {
+    final heightImageHeader = 300 * getRatio(context);
+    final heightContentHeader = 188 * getRatio(context);
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: double.infinity,
+            height: heightImageHeader + heightContentHeader * 3 / 5,
+            child: Stack(
               children: [
-                SizedBox(
-                  width: double.infinity,
-                  height: heightImageHeader + heightContentHeader * 3 / 5,
-                  child: Stack(
-                    children: [
-                      _buildImageHeader(heightImageHeader),
-                      _buildContentHeader(heightContentHeader),
-                    ],
-                  ),
-                ),
-                _buildOverview(),
+                _buildImageHeader(heightImageHeader),
+                _buildContentHeader(heightContentHeader),
               ],
             ),
           ),
-          _BackButton(
-            margin: const EdgeInsets.only(left: 20, top: 20),
-          ),
+          _buildOverview(),
+          _buildCastList(context),
+          _buildBottomButton(context),
         ],
       ),
     );
@@ -144,23 +149,23 @@ class _MovieDetailPageState
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 12),
                   Text(
                     '${movie.popularity.toInt()} ' + StringApp.people_awaiting,
                     textAlign: TextAlign.start,
                     maxLines: 2,
                     style: const TextStyle(
-                        color: ColorApp.color_text_33,
+                        color: Colors.black,
                         fontSize: 15,
                         fontWeight: FontWeight.normal),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 12),
                   Text(
                     movie.releaseDate,
                     textAlign: TextAlign.start,
                     maxLines: 1,
                     style: const TextStyle(
-                        color: ColorApp.color_text_33,
+                        color: Colors.black,
                         fontSize: 15,
                         fontWeight: FontWeight.normal),
                   ),
@@ -228,6 +233,179 @@ class _MovieDetailPageState
             fontWeight: FontWeight.normal,
             height: 1.6),
       ),
+    );
+  }
+
+  Widget _buildCastList(BuildContext context) {
+    return Container();
+  }
+
+  Widget _buildBottomButton(BuildContext context) {
+    final height = 100 * getRatio(context);
+    final itemSize = height * 0.75;
+    final iconSize = itemSize * 0.45;
+    return SizedBox(
+      width: double.infinity,
+      height: height,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _buildLike(itemSize, iconSize),
+          _buildFavorite(itemSize, iconSize),
+          _buildComment(itemSize, iconSize),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLike(double itemSize, double iconSize) {
+    return Column(
+      children: [
+        SizedBox(
+          width: itemSize,
+          height: itemSize,
+          child: Card(
+            shape: const CircleBorder(),
+            shadowColor: Colors.black54,
+            elevation: 4,
+            child: Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(itemSize / 2),
+                    gradient: LinearGradient(
+                      begin: FractionalOffset(0.0, 0.5),
+                      end: FractionalOffset(1.0, 1.0),
+                      colors: [
+                        Color.fromRGBO(249, 159, 0, 1),
+                        Color.fromRGBO(219, 48, 105, 1),
+                      ],
+                    ),
+                  ),
+                ),
+                Center(
+                  child: SizedBox(
+                    width: iconSize,
+                    height: iconSize,
+                    child: Image.asset(
+                      ImageApp.ic_like_white,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Expanded(
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Text(
+              '${widget.movie.voteCount}K',
+              style: const TextStyle(
+                fontSize: 14,
+                color: ColorApp.color_text_102,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFavorite(double itemSize, double iconSize) {
+    return Column(
+      children: [
+        SizedBox(
+          width: itemSize,
+          height: itemSize,
+          child: Card(
+            shape: const CircleBorder(),
+            shadowColor: Colors.black54,
+            elevation: 4,
+            child: Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.amberAccent,
+                    borderRadius: BorderRadius.circular(itemSize / 2),
+                  ),
+                ),
+                Center(
+                  child: SizedBox(
+                    width: iconSize,
+                    height: iconSize,
+                    child: Image.asset(
+                      ImageApp.ic_favorite_white,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Expanded(
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Text(
+              StringApp.favorite,
+              style: const TextStyle(
+                fontSize: 14,
+                color: ColorApp.color_text_102,
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _buildComment(double itemSize, double iconSize) {
+    return Column(
+      children: [
+        SizedBox(
+          width: itemSize,
+          height: itemSize,
+          child: Card(
+            shape: const CircleBorder(),
+            shadowColor: Colors.black54,
+            elevation: 4,
+            child: Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(itemSize / 2),
+                  ),
+                ),
+                Center(
+                  child: SizedBox(
+                    width: iconSize,
+                    height: iconSize,
+                    child: Image.asset(
+                      ImageApp.ic_comment_white,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Expanded(
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Text(
+              StringApp.comment,
+              style: const TextStyle(
+                fontSize: 14,
+                color: ColorApp.color_text_102,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

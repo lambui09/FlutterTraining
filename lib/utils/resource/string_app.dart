@@ -9,4 +9,6 @@ class StringApp {
 
   static const String back = 'Back';
   static const String people_awaiting = 'People Awaiting';
+  static const String favorite = 'FAVORITE';
+  static const String comment = 'COMMENT';
 }
